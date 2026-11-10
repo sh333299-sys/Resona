@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node (legacy backend only)
+node_modules/
+legacy-node/node_modules/
+
+# Local / environment
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db

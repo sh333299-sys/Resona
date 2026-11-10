@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#08080d">
+  <meta name="description" content="Resona — stream music and videos, build playlists, and download your favourites.">
+  <title>Resona — Music & Video</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ============================ SIDEBAR ============================ -->
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" data-nav="home" aria-label="Resona home">
+        <span class="brand-mark"><i class="fa-solid fa-wave-square"></i></span>
+        <span class="brand-copy">
+          <strong>Resona</strong>
+          <small>music • video • free</small>
+        </span>
+      </a>
+
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="side-link is-active" data-nav="home">
+          <i class="fa-solid fa-house"></i><span>Home</span>
+        </button>
+        <button class="side-link" data-nav="search">
+          <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
+        </button>
+        <button class="side-link" data-nav="explore">
+          <i class="fa-solid fa-compass"></i><span>Explore</span>
+        </button>
+        <button class="side-link" data-nav="video">
+          <i class="fa-solid fa-film"></i><span>Video stage</span>
+          <em class="nav-dot"></em>
+        </button>
+      </nav>
+
+      <div class="side-section">
+        <div class="side-heading">
+          <span>Your library</span>
+          <div class="side-heading-actions">
+            <button class="icon-btn tiny" id="import-playlist-btn" title="Import Spotify playlist"><i class="fa-brands fa-spotify"></i></button>
+            <button class="icon-btn tiny" id="create-playlist-btn" title="Create playlist"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+        <nav class="side-nav compact" aria-label="Library">
+          <button class="side-link" data-nav="liked">
+            <i class="fa-solid fa-heart"></i><span>Liked songs</span>
+            <b class="side-count" id="liked-nav-count">0</b>
+          </button>
+          <button class="side-link" data-nav="downloads">
+            <i class="fa-solid fa-circle-down"></i><span>Downloads</span>
+          </button>
+        </nav>
+        <div class="playlist-list" id="playlist-list"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="autoplay-card">
+          <div>
+            <strong>Autoplay radio</strong>
+            <small>Keep similar tracks coming</small>
+          </div>
+          <button class="switch is-on" id="autoplay-switch" role="switch" aria-checked="true" title="Toggle autoplay radio">
+            <span></span>
+          </button>
+        </div>
+        <div class="shortcut-hint">
+          <span><kbd>Space</kbd> play</span>
+          <span><kbd>/</kbd> search</span>
+          <span><kbd>V</kbd> video</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============================ MAIN ============================ -->
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="mobile-menu-btn" title="Menu"><i class="fa-solid fa-bars"></i></button>
+
+        <div class="search-wrap" id="search-wrap">
+          <i class="fa-solid fa-magnifying-glass search-glass"></i>
+          <input id="search-input" type="search" placeholder="Search songs, artists, albums..." autocomplete="off" spellcheck="false" aria-label="Search music">
+          <button class="search-clear" id="search-clear" title="Clear search" hidden><i class="fa-solid fa-xmark"></i></button>
+          <div class="suggestions" id="suggestions" hidden></div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="mode-pill" id="mode-toggle" title="Switch between audio and video">
+            <i class="fa-solid fa-headphones" id="mode-icon"></i>
+            <span id="mode-label">Audio</span>
+          </button>
+          <button class="pill-btn" id="top-download" title="Download current track" disabled>
+            <i class="fa-solid fa-download"></i><span>Download</span>
+          </button>
+          <button class="avatar-btn" title="Your listening profile"><span>R</span></button>
+        </div>
+      </header>
+
+      <div class="views" id="views">
+        <!-- HOME -->
+        <section class="view is-active" data-view="home" id="view-home">
+          <div class="hero" id="hero">
+            <div class="hero-glow" id="hero-glow"></div>
+            <div class="hero-art-wrap">
+              <img id="hero-art" alt="" src="">
+              <span class="hero-play-glyph"><i class="fa-solid fa-music"></i></span>
+            </div>
+            <div class="hero-copy">
+              <span class="eyebrow"><i class="fa-solid fa-bolt"></i> Featured today</span>
+              <h1 id="hero-title">Your next favourite song is one tap away.</h1>
+              <p id="hero-subtitle">Stream music and videos instantly, build playlists, and download tracks for offline listening.</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="hero-play"><i class="fa-solid fa-play"></i> Play now</button>
+                <button class="btn btn-ghost" id="hero-video"><i class="fa-solid fa-circle-play"></i> Watch video</button>
+                <button class="icon-btn soft" id="hero-like" title="Like featured track"><i class="fa-regular fa-heart"></i></button>
+              </div>
+              <div class="hero-stats">
+                <span><i class="fa-solid fa-shield-halved"></i> In-app playback</span>
+                <span><i class="fa-solid fa-download"></i> Free downloads</span>
+                <span><i class="fa-solid fa-tower-broadcast"></i> Auto radio</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="home-shelves" class="shelves">
+            <div class="shelf-skeleton">
+              <div class="sk sk-title"></div>
+              <div class="sk-row">
+                <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
+              </div>
+            </div>
+          </div>
+
+          <section class="explore-strip">
+            <div class="section-head">
+              <div>
+                <h2>Browse everything</h2>
+                <p>Jump into a mood, a genre, or a moment.</p>
+              </div>
+              <button class="text-btn" data-nav="explore">See all <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="genre-grid compact" id="home-genres"></div>
+          </section>
+        </section>
+
+        <!-- SEARCH -->
+        <section class="view" data-view="search" id="view-search">
+          <div class="page-head">
+            <span class="eyebrow"><i class="fa-solid fa-magnifying-glass"></i> Search</span>
+            <h1>Find your sound.</h1>
+            <p id="search-subtitle">Search millions of tracks, artists, and videos.</p>
+          </div>
+          <div class="search-tabs" id="search-tabs">
+            <button class="search-tab is-active" data-tab="all">All results</button>
+            <button class="search-tab" data-tab="songs">Songs</button>
+            <button class="search-tab" data-tab="videos">Long plays</button>
+            <button class="search-tab" data-tab="library">In your library</button>
+          </div>
+          <div class="recent-searches" id="recent-searches" hidden>
+            <div class="mini-heading"><span>Recent searches</span><button class="text-btn" id="clear-recent-searches">Clear</button></div>
+            <div class="chip-row" id="recent-search-chips"></div>
+          </div>
+          <div class="results-meta" id="search-meta"></div>
+          <div class="card-grid" id="search-results"></div>
+          <div class="empty-state" id="search-empty" hidden>
+            <span class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <h3>Search for anything</h3>
+            <p>Try a song name, an artist, a mood, or a movie soundtrack.</p>
+          </div>
+        </section>
+
+        <!-- EXPLORE -->
+        <section class="view" data-view="explore" id="view-explore">
+          <div class="page-head">
+            <span class="eyebrow"><i class="fa-solid fa-compass"></i> Explore</span>
+            <h1>Every mood has a soundtrack.</h1>
+            <p>Pick a lane and we will keep the queue moving.</p>
+          </div>
+          <div class="genre-grid large" id="genre-grid"></div>
+        </section>
+
+        <!-- LIKED -->
+        <section class="view" data-view="liked" id="view-liked">
+          <div class="collection-hero liked-hero">
+            <div class="collection-art"><i class="fa-solid fa-heart"></i></div>
+            <div class="collection-copy">
+              <span class="eyebrow">Collection</span>
+              <h1>Liked songs</h1>
+              <p><span id="liked-count">0 songs</span> • <span id="liked-duration">0 min</span></p>
+              <div class="collection-actions">
+                <button class="btn btn-primary" id="liked-play"><i class="fa-solid fa-play"></i> Play all</button>
+                <button class="btn btn-ghost" id="liked-shuffle"><i class="fa-solid fa-shuffle"></i> Shuffle</button>
+              </div>
+            </div>
+          </div>
+          <div class="track-list" id="liked-list"></div>
+          <div class="empty-state" id="liked-empty" hidden>
+            <span class="empty-icon"><i class="fa-regular fa-heart"></i></span>
+            <h3>No liked songs yet</h3>
+            <p>Tap the heart on any track and it will show up here.</p>
+            <button class="btn btn-primary" data-nav="home">Discover music</button>
+          </div>
+        </section>
+
+        <!-- DOWNLOADS -->
+        <section class="view" data-view="downloads" id="view-downloads">
+          <div class="page-head with-actions">
+            <div>
+              <span class="eyebrow"><i class="fa-solid fa-circle-down"></i> Downloads</span>
+              <h1>Take it offline.</h1>
+              <p id="downloads-subtitle">Your recent audio and video downloads.</p>
+            </div>
+            <button class="btn btn-ghost" id="clear-downloads"><i class="fa-solid fa-broom"></i> Clear history</button>
+          </div>
+          <div class="track-list" id="downloads-list"></div>
+          <div class="empty-state" id="downloads-empty" hidden>
+            <span class="empty-icon"><i class="fa-solid fa-download"></i></span>
+            <h3>No downloads yet</h3>
+            <p>Use the download button on any track or video. Files are saved by your browser.</p>
+          </div>
+        </section>
+
+        <!-- PLAYLIST -->
+        <section class="view" data-view="playlist" id="view-playlist">
+          <div class="collection-hero playlist-hero" id="playlist-hero">
+            <div class="collection-art" id="playlist-art"><i class="fa-solid fa-list-music"></i></div>
+            <div class="collection-copy">
+              <span class="eyebrow">Playlist</span>
+              <h1 id="playlist-title">Playlist</h1>
+              <p id="playlist-subtitle">0 songs</p>
+              <div class="collection-actions">
+                <button class="btn btn-primary" id="playlist-play"><i class="fa-solid fa-play"></i> Play</button>
+                <button class="btn btn-ghost" id="playlist-shuffle"><i class="fa-solid fa-shuffle"></i> Shuffle</button>
+                <button class="icon-btn soft" id="playlist-rename" title="Rename playlist"><i class="fa-solid fa-pen"></i></button>
+                <button class="icon-btn soft" id="playlist-delete" title="Delete playlist"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="track-list" id="playlist-tracks"></div>
+          <div class="empty-state" id="playlist-empty" hidden>
+            <span class="empty-icon"><i class="fa-solid fa-list-music"></i></span>
+            <h3>This playlist is empty</h3>
+            <p>Use the ••• menu on any track and choose “Add to playlist”.</p>
+          </div>
+        </section>
+
+        <!-- VIDEO STAGE -->
+        <section class="view" data-view="video" id="view-video">
+          <div class="video-head">
+            <div>
+              <span class="eyebrow"><i class="fa-solid fa-circle-play"></i> In-app video</span>
+              <h1 id="video-stage-title">Select a track to watch</h1>
+              <p id="video-stage-artist">Video plays right here — no redirects, no pop-ups.</p>
+            </div>
+            <div class="video-head-actions">
+              <button class="btn btn-ghost" id="video-download"><i class="fa-solid fa-download"></i> Download video</button>
+              <button class="btn btn-ghost" id="video-audio-mode"><i class="fa-solid fa-headphones"></i> Audio mode</button>
+            </div>
+          </div>
+          <div class="video-layout">
+            <div class="video-stage" id="video-stage">
+              <div class="video-mount" id="video-stage-mount"></div>
+              <div class="video-placeholder" id="video-placeholder">
+                <span><i class="fa-solid fa-film"></i></span>
+                <h3>Nothing playing</h3>
+                <p>Pick a track from Home or Search to watch it here.</p>
+                <button class="btn btn-primary" data-nav="home">Browse music</button>
+              </div>
+              <div class="video-loading" id="video-loading" hidden>
+                <span class="spinner"></span>
+                <p>Preparing video...</p>
+              </div>
+            </div>
+            <aside class="upnext-panel">
+              <div class="mini-heading">
+                <span><i class="fa-solid fa-list"></i> Up next</span>
+                <button class="text-btn" id="video-queue-open">Queue</button>
+              </div>
+              <div class="upnext-list" id="video-upnext"></div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============================ PLAYER BAR ============================ -->
+  <footer class="player-bar" id="player-bar">
+    <div class="player-track">
+      <button class="player-art-wrap" id="player-expand" title="Open now playing">
+        <img id="player-art" alt="">
+        <span class="art-overlay"><i class="fa-solid fa-chevron-up"></i></span>
+      </button>
+      <div class="player-meta">
+        <strong id="player-title">Select a track</strong>
+        <span id="player-artist">Resona</span>
+      </div>
+      <button class="icon-btn like-btn" id="player-like" title="Like song"><i class="fa-regular fa-heart"></i></button>
+    </div>
+
+    <div class="player-center">
+      <div class="player-controls">
+        <button class="icon-btn" id="shuffle-btn" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+        <button class="icon-btn" id="prev-btn" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+        <button class="play-button" id="play-btn" title="Play / pause"><i class="fa-solid fa-play" id="play-icon"></i></button>
+        <button class="icon-btn" id="next-btn" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+        <button class="icon-btn repeat-btn" id="repeat-btn" title="Repeat"><i class="fa-solid fa-repeat"></i><span id="repeat-badge" hidden>1</span></button>
+      </div>
+      <div class="progress-row">
+        <span class="time" id="current-time">0:00</span>
+        <div class="progress" id="progress-container" role="slider" aria-label="Seek" tabindex="0">
+          <span class="progress-buffer" id="progress-buffer"></span>
+          <span class="progress-fill" id="progress-fill"></span>
+          <span class="progress-knob" id="progress-knob"></span>
+        </div>
+        <span class="time" id="total-time">0:00</span>
+      </div>
+    </div>
+
+    <div class="player-extra">
+      <button class="icon-btn" id="lyrics-btn" title="Lyrics"><i class="fa-solid fa-microphone-lines"></i></button>
+      <button class="icon-btn" id="queue-btn" title="Queue"><i class="fa-solid fa-list"></i></button>
+      <button class="icon-btn" id="video-btn" title="Video mode"><i class="fa-solid fa-film"></i></button>
+      <div class="volume-wrap">
+        <button class="icon-btn" id="volume-btn" title="Mute"><i class="fa-solid fa-volume-high" id="volume-icon"></i></button>
+        <input type="range" id="volume-slider" class="range volume-range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+      </div>
+    </div>
+  </footer>
+
+  <!-- Hidden media host: audio mode keeps the video element here. -->
+  <div class="media-host" id="media-host" aria-hidden="true">
+    <video id="media" playsinline preload="metadata"></video>
+  </div>
+
+  <!-- ============================ NOW PLAYING ============================ -->
+  <section class="now-playing" id="now-playing" hidden aria-label="Now playing">
+    <div class="np-backdrop" id="np-bg"></div>
+    <div class="np-scrim"></div>
+    <header class="np-top">
+      <button class="icon-btn" id="np-close" title="Close"><i class="fa-solid fa-chevron-down"></i></button>
+      <span class="np-context">Now playing</span>
+      <div class="np-top-actions">
+        <button class="icon-btn" id="np-download" title="Download audio"><i class="fa-solid fa-download"></i></button>
+        <button class="icon-btn" id="np-add" title="Add to playlist"><i class="fa-solid fa-plus"></i></button>
+      </div>
+    </header>
+
+    <div class="np-body">
+      <div class="np-art-side">
+        <div class="np-visualizer-wrap">
+          <canvas id="visualizer" class="visualizer"></canvas>
+          <div class="np-art"><img id="np-art" alt=""></div>
+        </div>
+        <div class="np-info">
+          <h2 id="np-title">Select a track</h2>
+          <p id="np-artist">Resona</p>
+        </div>
+        <div class="np-actions">
+          <button class="icon-btn like-btn" id="np-like" title="Like"><i class="fa-regular fa-heart"></i></button>
+          <button class="icon-btn" id="np-video" title="Toggle video"><i class="fa-solid fa-film"></i></button>
+        </div>
+        <div class="np-progress-wrap">
+          <div class="progress np-progress" id="np-progress">
+            <span class="progress-buffer" id="np-buffer"></span>
+            <span class="progress-fill" id="np-fill"></span>
+            <span class="progress-knob" id="np-knob"></span>
+          </div>
+          <div class="np-times"><span id="np-current">0:00</span><span id="np-total">0:00</span></div>
+        </div>
+        <div class="np-controls">
+          <button class="icon-btn" id="np-shuffle" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+          <button class="icon-btn" id="np-prev" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="play-button big" id="np-play" title="Play / pause"><i class="fa-solid fa-play" id="np-play-icon"></i></button>
+          <button class="icon-btn" id="np-next" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+          <button class="icon-btn repeat-btn" id="np-repeat" title="Repeat"><i class="fa-solid fa-repeat"></i><span id="np-repeat-badge" hidden>1</span></button>
+        </div>
+        <div class="np-volume">
+          <button class="icon-btn" id="np-mute" title="Mute"><i class="fa-solid fa-volume-high" id="np-volume-icon"></i></button>
+          <input type="range" id="np-volume" class="range volume-range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+        </div>
+      </div>
+
+      <div class="np-panel-side">
+        <div class="np-tabs" id="np-tabs">
+          <button class="np-tab is-active" data-np-tab="queue">Up next</button>
+          <button class="np-tab" data-np-tab="lyrics">Lyrics</button>
+          <button class="np-tab" data-np-tab="details">Details</button>
+        </div>
+        <div class="np-panel" id="np-panel"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ QUEUE DRAWER ============================ -->
+  <aside class="drawer" id="queue-drawer" hidden aria-label="Playback queue">
+    <header class="drawer-head">
+      <div>
+        <span class="eyebrow">Playback</span>
+        <h2>Queue</h2>
+      </div>
+      <div class="drawer-actions">
+        <button class="icon-btn" id="queue-clear" title="Clear queue"><i class="fa-solid fa-broom"></i></button>
+        <button class="icon-btn" id="queue-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </header>
+    <div class="queue-now" id="queue-now"></div>
+    <div class="queue-list" id="queue-list"></div>
+  </aside>
+
+  <!-- ============================ LYRICS DRAWER ============================ -->
+  <aside class="drawer lyrics-drawer" id="lyrics-drawer" hidden aria-label="Lyrics">
+    <header class="drawer-head">
+      <div>
+        <span class="eyebrow">Lyrics</span>
+        <h2 id="lyrics-title">Lyrics</h2>
+        <p id="lyrics-artist">Track artist</p>
+      </div>
+      <button class="icon-btn" id="lyrics-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+    </header>
+    <div class="lyrics-body" id="lyrics-body"></div>
+  </aside>
+
+  <!-- ============================ CONTEXT MENU / MODAL / TOASTS ============================ -->
+  <div class="context-menu" id="context-menu" hidden></div>
+  <div class="modal-root" id="modal-root" hidden></div>
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <script src="app.js?v=5"></script>
+</body>
+</html>

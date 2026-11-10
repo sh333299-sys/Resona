@@ -1,0 +1,20 @@
+{
+  "name": "music-player",
+  "version": "1.0.0",
+  "description": "Resona — a self-hosted music and video player with in-app streaming, lyrics and downloads.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --check server.js && node --check public/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@distube/ytdl-core": "^5.2.1",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "yt-search": "^2.13.1"
+  }
+}
